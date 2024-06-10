@@ -27,13 +27,12 @@ function HomeStack(){
   return(
     <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false}}>
         <Stack.Screen 
-        name="Settings"
+        name="Home"
         component={HomeScreen}
         />
     </Stack.Navigator>
   );
 }
-
 
 //bottom tab navigator
 function MapStack({ shoes }) {
@@ -95,7 +94,6 @@ const [shoes, setShoes] = useState([]);
             title: 'Home',
           }} />
         
-
           <Tab.Screen
           name='MapStack'
           component={MapStack}
@@ -116,10 +114,11 @@ const [shoes, setShoes] = useState([]);
           name='settingStack'
           component={settingStack}
           options={{
-            tabBarLabel: 'Saved',
-            title: 'Saved',
-          }}   
-        />
+            tabBarLabel: 'Setting',
+            title: 'Setting',
+          }}  />
+
+          
     </Tab.Navigator>
   </NavigationContainer> 
   );
