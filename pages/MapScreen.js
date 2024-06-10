@@ -4,7 +4,7 @@ import React from "react";
 export default function Map() {
     return (
         <View>
-            <text>Map screen</text>
+            <Text>Map screen</Text>
         </View>
     );
 }

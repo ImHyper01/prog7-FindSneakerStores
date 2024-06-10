@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-export default function List() {
+export default function SavedScreen() {
     return (
         <View>
-            <Text>List screen</Text>
+            <Text>SavedScreen</Text>
         </View>
     );
 }

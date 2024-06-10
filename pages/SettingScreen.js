@@ -4,7 +4,7 @@ import React from "react";
 export default function Setting() {
     return (
         <View>
-            <text>Setting screen</text>
+            <Text>Setting screen</Text>
         </View>
     );
 }
