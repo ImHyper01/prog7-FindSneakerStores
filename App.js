@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
 
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { NavigationContainer } from '@react-navigation/native';
-import Constants from 'expo-constants';
+import {  DefaultTheme, DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import theme from './theme/theme';
+import themeContext from './theme/themeContext';
 
 
 import HomeScreen from './pages/HomeScreen';
@@ -16,6 +15,7 @@ import ListScreen from './pages/ListScreen';
 import MapScreen from './pages/MapScreen';
 import SettingScreen from './pages/SettingScreen';
 import SavedScreen from './pages/SavedScreen';
+import { EventRegister } from 'react-native-event-listeners';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,7 +63,7 @@ function ListStack({ shoes }) {
 }
 
 //bottom tab navigator
-function settingStack(){
+function SettingStack(){
   return(
     <Stack.Navigator initialRouteName="Settings" screenOptions={{ headerShown: false}}>
         <Stack.Screen 
@@ -80,11 +80,58 @@ function App() {
 const [loading, setLoading] = useState(true);
 const [shoes, setShoes] = useState([]);
 
+const getShoes = async () => {
+  try {
+    const response = await fetch('https://stud.hosted.hr.nl/1027469/shoestores.json');
+    const json = await response.json();
+      setShoes(json.shoes);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getShoes();
+  }, []);
+
+  const [darkMode, setDarkMode] = useState(false)
+
+  useEffect(() => {
+    const listener = EventRegister.addEventListener('ChangeTheme', (data) => {
+      setDarkMode(data)
+    })
+    return () => {
+      EventRegister.removeAllListeners(listener)
+    }
+
+  }, [darkMode])
 
   return (
-    
-  <NavigationContainer> 
-    <Tab.Navigator>
+<themeContext.Provider value={darkMode === true ? theme.dark : theme.light}>  
+  <NavigationContainer theme={darkMode === true ? DarkTheme: DefaultTheme}> 
+    <Tab.Navigator
+    initialRouteName="Feed"
+    screenOptions={({ route }) => ({
+      headerStyle: { backgroundColor: '#0000e6' },
+      headerTintColor: '#fff',
+      headerTitleStyle: { fontWeight: 'bold' },
+      tabBarActiveTintColor: 'tomato',
+      tabBarInactiveTintColor: 'gray',
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName;
+        if (route.name === 'MapStack') {
+          iconName = focused ? 'map-marker' : 'map-marker-outline';
+        } else if (route.name === 'ListStack') {
+          iconName = focused ? 'format-list-bulleted' : 'format-list-bulleted';
+        } else if (route.name === 'SettingsStack') {
+          iconName = focused ? 'cog' : 'cog-outline';
+        }
+        return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+      },
+    })}
+    >
 
         <Tab.Screen
           name='HomeStack'
@@ -111,8 +158,8 @@ const [shoes, setShoes] = useState([]);
           }} />
 
           <Tab.Screen 
-          name='settingStack'
-          component={settingStack}
+          name='SettingStack'
+          component={SettingStack}
           options={{
             tabBarLabel: 'Setting',
             title: 'Setting',
@@ -121,6 +168,7 @@ const [shoes, setShoes] = useState([]);
           
     </Tab.Navigator>
   </NavigationContainer> 
+</themeContext.Provider>
   );
 }
 
