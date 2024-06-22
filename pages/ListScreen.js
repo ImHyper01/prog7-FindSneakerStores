@@ -74,13 +74,14 @@ const ListScreen = ({ route, navigation }) => {
                                     
                                     >
 
-                                        <Text style={[styles.textItem, {color: 'red' }]}>{shoe.title}</Text>
+                                        <Text style={[styles.textItem, {color: theme.color }]}>{shoe.title}</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity onPress={() => handleSaveShoe(shoe.title)}
-                                        style={[styles.itemHeartButton, { color: 'red' }]}
+                                        style={[styles.itemHeartButton, { color: theme.color }]}
                                         >
 
-                                            <Icon name={isShoeSaved(shoe.title) ? 'heart' : 'heart-outline'}
+                                            <Icon 
+                                            name={isShoeSaved(shoe.title) ? 'heart' : 'heart-outline'}
                                             size={30}
                                             color={isShoeSaved(shoe.title) ? 'red' : theme.color}
                                             />
@@ -91,7 +92,7 @@ const ListScreen = ({ route, navigation }) => {
                             
                     </View>
                         
-                        <TouchableOpacity style={[styles.heartButton, { backgroundColor: 'gray' }]} onPress={() => navigation.navigate('Saved')}>
+                        <TouchableOpacity style={[styles.heartButton, { backgroundColor: theme.color }]} onPress={() => navigation.navigate('Saved')}>
                             <Icon name='heart' size={30} color='red' />
                         </TouchableOpacity>
                     </View>
