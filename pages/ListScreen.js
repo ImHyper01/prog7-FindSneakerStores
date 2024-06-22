@@ -50,7 +50,7 @@ const ListScreen = ({ route, navigation }) => {
             }
         };
 
-        const isShoeSaved = (shoeSaved) => {
+        const isShoeSaved = (shoeTitle) => {
             return savedShoes.includes(shoeTitle);
         };
 

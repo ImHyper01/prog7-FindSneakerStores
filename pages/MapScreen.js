@@ -1,59 +1,61 @@
-import * as React from 'react'
-import { useState, useEffect, useContext} from 'react';
-import MapView, { Marker } from 'react-native-maps';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
+import * as React from 'react';
+import { useState, useEffect, useContext } from 'react';
+import MapView, {Marker} from 'react-native-maps';
+import { TouchableOpacity, StyleSheet, View, Text, SafeAreaView } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as Location from 'expo-location';
 import themeContext from '../theme/themeContext';
 
+const MapScreen = ({ route, navigation}) => {
+  const [shoes, setShoes] = useState([]);
+  const [selectedShoe, setSelectedShoe] = useState(null);
 
+  const theme = useContext(themeContext);
 
-const MapScreen = () => {
-
-    //hier roep ik de dark modus aan via de theme
-    //Hier maak ik variables om dadelijk de data te kunnen fetchen
-    const theme = useContext(themeContext);
-    const [data, setData] = useState([]);
-  
-      //hier fetch ik data uit de json file die op de stud hosted staat
-    const fetchMarkers = async () => {
-      try {
-        const response = await fetch('https://stud.hosted.hr.nl/1027469/map.json');
-        const json = await response.json();
-        setData(json.index);
-      } catch (error) {
-        console.error(error);
-    } finally {
-      setLoading(false)
-    }
-  };
-  
-  //Hier haal ik de functie op, om zo de data te kunnen gebruiken
   useEffect(() => {
-    fetchMarkers();
+    setShoes(route.params.shoes);
   }, []);
-  
-  //Hier vraag ik als ik toestemming mag, om je locatie te mogen weten
+
   useEffect(() => {
     (async () => {
-      
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        console.log('Permission to access location was denied');
+        console.log('permission to acces location is denied');
         return;
       }
-  
+
       let location = await Location.getCurrentPositionAsync({});
       console.log(location);
-  
-      setPin({
-        latitude: location.coords.latitude,
-        longitude: location.longitude,
-      });
     })();
   }, []);
+
   
+
+  useEffect(() => {
+    if (route.params && route.params.selectedShoe) {
+      setSelectedShoe(route.params.selectedShoe);
+    }
+  }, [route.params])
+
+  useEffect(() => {
+    if (selectedShoe) {
+      const { latitude, longitude } = selectedShoe;
+      mapRef.current?.animateToRegion({
+        latitude,
+        longitude,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,
+      });
+    }
+  }, [selectedShoe]);
+
+  const mapRef = React.useRef(null);
+
   return (
-<View style={[styles.container]}> 
-    <MapView style={styles.map} region={{
+    <SafeAreaView style={{ flex: 1}}>
+      <View style={styles.view}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <MapView style={styles.map} ref={mapRef} region={{
       latitude: 51.91972,
               longitude: 4.47778,
               latitudeDelta: 0.015,
@@ -64,45 +66,66 @@ const MapScreen = () => {
             e.nativeEvent
           }}
           > 
-          {data.map((item) => 
-      <Marker 
-      //hier fetch ik de data uit de json file om zo de markers op de map te kunnen zetten.
-          coordinate={{
-            latitude: item.latitude,
-             longitude: item.longitude,
-              latitudeDelta: 0.01,
-               longitudeDelta:0.01}}
-               title={item.title}
-               description= {item.description}>
-               </Marker>)}
-      </MapView>
-      <Text> Welkom op de map, zie hier boven alle sneakers stores </Text>
-    </View>
-    );
-  };
-  
-  //stylechanges
-const styles = StyleSheet.create({
-    container: {
-      ...StyleSheet.absoluteFillObject,
-      height: 400,
-      width: 400,
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-    },
-    map: {
-      ...StyleSheet.absoluteFillObject,
-    },
+          {shoes && shoes.length > 0 && shoes.map((shoe, index) => (
+            <Marker
+            key={index}
+            coordinate={{ 
+              title: shoe.title,
+              description: shoe.description,
+              latitude: shoe.latitude,
+              longitude: shoe.longitude,
+            }}
 
-    text: {
-      fontSize: 25,
-      textAlign: 'center',
-      marginBottom: -125
-    },
-    marker: {
-      height: 50,
-      width: 21.50,
-    },
-   });
+            onPress={() => setSelectedShoe(shoe)}
+            />
+          ))}
+        </MapView>
+
+        <TouchableOpacity style={[styles.heartButton, { backgroundColor: theme.color }]} onPress={() => navigation.navigate('Saved')}>
+          <Icon name='heart' size={30} color="red" />
+        </TouchableOpacity>
+      </View>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
+    width: 300,
+    marginTop: 16,
+  },
+
+  view: {
+    flex: 1,
+    padding: 0,
+  },
+
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+
+  heartButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    zIndex: 1,
+    backgroundColor: '#000',
+    padding: 8,
+    borderRadius: 20,
+    elevation: 5,
+  },
+
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    height: 400,
+    width: 400,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+});
 
 export default MapScreen;

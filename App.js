@@ -143,7 +143,7 @@ const getShoes = async () => {
         
           <Tab.Screen
           name='MapStack'
-          component={MapStack}
+          component={() => <MapStack shoes={shoes} />}
           options={{
             tabBarLabel: 'Map',
             title: 'Map',
@@ -151,7 +151,7 @@ const getShoes = async () => {
 
           <Tab.Screen 
           name='ListStack'
-          component={ListStack}
+          component={() => <ListStack shoes={shoes} />}
           options={{
             tabBarLabel: 'List',
             title: 'List',
