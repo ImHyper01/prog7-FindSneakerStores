@@ -10,14 +10,17 @@ const MapScreen = ({ route, navigation }) => {
   const [shoes, setShoes] = useState([]);
   const [selectedShoe, setSelectedShoe] = useState(null);
 
+  // hier fetch ik de date van de context
   const theme = useContext(themeContext);
 
+    //hier fetch ik de winkels van de route parameters en zet ik zi in een useState
   useEffect(() => {
     if (route.params && route.params.shoes) {
       setShoes(route.params.shoes);
     }
   }, [route.params]);
 
+  //handle de klik op een winkel en navigeer het op de map
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -32,13 +35,16 @@ const MapScreen = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
+    //fetch de gekozen winkel van de route parameter en zet het in een state
     if (route.params && route.params.selectedShoe) {
       setSelectedShoe(route.params.selectedShoe);
     }
   }, [route.params]);
 
   useEffect(() => {
+    //wanner de winkel gekozen wordt, focus het op de gekozen winkel
     if (selectedShoe) {
+      //vanuit gaan dat winkel object een latitude en longitude heeft.
       const { latitude, longitude } = selectedShoe;
       mapRef.current?.animateToRegion({
         latitude,
@@ -49,6 +55,7 @@ const MapScreen = ({ route, navigation }) => {
     }
   }, [selectedShoe]);
 
+  // create een refrence naar de map
   const mapRef = React.useRef(null);
 
   return (

@@ -96,8 +96,9 @@ const getShoes = async () => {
     getShoes();
   }, []);
 
+  //begin darkmodus
   const [darkMode, setDarkMode] = useState(false)
-
+  //event listener toevoegen om te kunnen togglen tussen dark en light modus
   useEffect(() => {
     const listener = EventRegister.addEventListener('ChangeTheme', (data) => {
       setDarkMode(data)
@@ -112,9 +113,10 @@ const getShoes = async () => {
 <themeContext.Provider value={darkMode === true ? theme.dark : theme.light}>  
   <NavigationContainer theme={darkMode === true ? DarkTheme: DefaultTheme}> 
     <Tab.Navigator
+    //styling van de navigator en het kop stukje van mijn app
     initialRouteName="Feed"
     screenOptions={({ route }) => ({
-      headerStyle: { backgroundColor: '#0000e6' },
+      headerStyle: { backgroundColor: '#eb9e34' },
       headerTintColor: '#fff',
       headerTitleStyle: { fontWeight: 'bold' },
       tabBarActiveTintColor: 'tomato',
@@ -139,12 +141,16 @@ const getShoes = async () => {
                 ? 'cog'
                 : 'cog-outline';
             }
-        return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+            //icon aanpassing met de naam en groote
+        return <MaterialCommunityIcons 
+        name={iconName} 
+        size={size} 
+        color={color} />;
       },
     })}
     >
-
         <Tab.Screen
+        //bottom tab navigator 
           name='HomeStack'
           component={HomeStack}
           options={{

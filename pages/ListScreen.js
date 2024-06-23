@@ -11,6 +11,7 @@ const ListScreen = ({ route, navigation }) => {
 
   const theme = useContext(themeContext);
 
+  //hier fetch ik de winkels van de route parameters en zet ik ze in een useState
   useEffect(() => {
     if (route.params && route.params.shoes) {
       setShoes(route.params.shoes);
@@ -18,6 +19,7 @@ const ListScreen = ({ route, navigation }) => {
     getSavedShoes();
   }, [route.params]);
 
+  //fetch ik de saved Schoenen van een json file
   const getSavedShoes = async () => {
     try {
       const savedShoesJson = await AsyncStorage.getItem('savedShoes');
@@ -33,11 +35,13 @@ const ListScreen = ({ route, navigation }) => {
     try {
       const index = savedShoes.indexOf(shoeTitle);
       if (index === -1) {
+        //winkel is niet opgeslagen, wordt toegevoegd aan winkel lijst
         const updatedSavedShoes = [...savedShoes, shoeTitle];
         setSavedShoes(updatedSavedShoes);
         await AsyncStorage.setItem('savedShoes', JSON.stringify(updatedSavedShoes));
         alert('Shoe saved successfully!');
       } else {
+        //winkel is al toegevoegd, wordt hier verwijderd van de lijst
         const updatedSavedShoes = savedShoes.filter((savedShoe) => savedShoe !== shoeTitle);
         setSavedShoes(updatedSavedShoes);
         await AsyncStorage.setItem('savedShoes', JSON.stringify(updatedSavedShoes));
@@ -48,10 +52,12 @@ const ListScreen = ({ route, navigation }) => {
     }
   };
 
+  //een check als het toegevoegd is
   const isShoeSaved = (shoeTitle) => {
     return savedShoes.includes(shoeTitle);
   };
 
+  //handle de klik die de winkel laat zien op de map
   const handleShoeItemClick = (shoe) => {
     navigation.navigate('Map', { selectedShoe: shoe, shoes: shoes });
   };

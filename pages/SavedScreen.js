@@ -9,10 +9,12 @@ const SavedScreen = () => {
 
     const theme = useContext(themeContext);
 
+    //fetch de saved winkels van de opslag
     useEffect(() => {
         getSavedShoes();
     }, []);
 
+    //hier haal ik de saved winkel op van de opslag
     const getSavedShoes = async () => {
         try {
             const savedShoesJson = await AsyncStorage.getItem('savedShoes');
