@@ -39,7 +39,7 @@ const SavedScreen = () => {
                             </View>
                         ))
                     ) : (
-                        <Text>Geen schoenen zijn gevonden</Text>
+                        <Text>Er zijn geen favoriete winkels gevonden</Text>
                     )}
                 </View>
             </View>

@@ -121,13 +121,24 @@ const getShoes = async () => {
       tabBarInactiveTintColor: 'gray',
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
-        if (route.name === 'MapStack') {
-          iconName = focused ? 'map-marker' : 'map-marker-outline';
-        } else if (route.name === 'ListStack') {
-          iconName = focused ? 'format-list-bulleted' : 'format-list-bulleted';
-        } else if (route.name === 'SettingsStack') {
-          iconName = focused ? 'cog' : 'cog-outline';
-        }
+            //Via hier gaat de routes werken om naar de verschillende pagina's te kunnen gaan. ik wijzig hier ook de icons
+            if(route.name === 'HomeStack') {
+              iconName = focused
+                ? 'home-circle'
+                : 'home-circle-outline';
+            }else if(route.name === 'MapStack') {
+              iconName = focused
+                ? 'map-marker'
+                : 'map-marker-outline';
+            }else if(route.name === 'ListStack') {
+              iconName = focused
+                ? 'format-list-bulleted'
+                : 'format-list-bulleted';
+            }else if (route.name === 'SettingStack') {
+              iconName = focused
+                ? 'cog'
+                : 'cog-outline';
+            }
         return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
       },
     })}

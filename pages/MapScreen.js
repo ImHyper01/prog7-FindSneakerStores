@@ -1,26 +1,28 @@
 import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import MapView, {Marker} from 'react-native-maps';
-import { TouchableOpacity, StyleSheet, View, Text, SafeAreaView } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import { TouchableOpacity, StyleSheet, View, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Location from 'expo-location';
 import themeContext from '../theme/themeContext';
 
-const MapScreen = ({ route, navigation}) => {
+const MapScreen = ({ route, navigation }) => {
   const [shoes, setShoes] = useState([]);
   const [selectedShoe, setSelectedShoe] = useState(null);
 
   const theme = useContext(themeContext);
 
   useEffect(() => {
-    setShoes(route.params.shoes);
-  }, []);
+    if (route.params && route.params.shoes) {
+      setShoes(route.params.shoes);
+    }
+  }, [route.params]);
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        console.log('permission to acces location is denied');
+        console.log('Permission to access location was denied');
         return;
       }
 
@@ -29,13 +31,11 @@ const MapScreen = ({ route, navigation}) => {
     })();
   }, []);
 
-  
-
   useEffect(() => {
     if (route.params && route.params.selectedShoe) {
       setSelectedShoe(route.params.selectedShoe);
     }
-  }, [route.params])
+  }, [route.params]);
 
   useEffect(() => {
     if (selectedShoe) {
@@ -52,62 +52,51 @@ const MapScreen = ({ route, navigation}) => {
   const mapRef = React.useRef(null);
 
   return (
-    <SafeAreaView style={{ flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.view}>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <MapView style={styles.map} ref={mapRef} region={{
-      latitude: 51.91972,
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <MapView
+            style={styles.map}
+            ref={mapRef}
+            initialRegion={{
+              latitude: 51.91972,
               longitude: 4.47778,
               latitudeDelta: 0.015,
               longitudeDelta: 0.0121,
-          }}
-          showsUserLocation={true}
-          onUserLocationChange={(e) => {
-            e.nativeEvent
-          }}
-          > 
-          {shoes && shoes.length > 0 && shoes.map((shoe, index) => (
-            <Marker
-            key={index}
-            coordinate={{ 
-              title: shoe.title,
-              description: shoe.description,
-              latitude: shoe.latitude,
-              longitude: shoe.longitude,
             }}
+            showsUserLocation={true}
+          >
+            {shoes && shoes.length > 0 && shoes.map((shoe, index) => (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude: shoe.latitude,
+                  longitude: shoe.longitude,
+                }}
+                title={shoe.title}
+                description={shoe.description}
+                onPress={() => setSelectedShoe(shoe)}
+              />
+            ))}
+          </MapView>
 
-            onPress={() => setSelectedShoe(shoe)}
-            />
-          ))}
-        </MapView>
-
-        <TouchableOpacity style={[styles.heartButton, { backgroundColor: theme.color }]} onPress={() => navigation.navigate('Saved')}>
-          <Icon name='heart' size={30} color="red" />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity style={[styles.heartButton, { backgroundColor: theme.color }]} onPress={() => navigation.navigate('Saved')}>
+            <Icon name='heart' size={30} color="red" />
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10,
-    width: 300,
-    marginTop: 16,
-  },
-
   view: {
     flex: 1,
     padding: 0,
   },
-
   map: {
     ...StyleSheet.absoluteFillObject,
   },
-
   heartButton: {
     position: 'absolute',
     top: 16,
@@ -117,14 +106,6 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
     elevation: 5,
-  },
-
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    height: 400,
-    width: 400,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
   },
 });
 
