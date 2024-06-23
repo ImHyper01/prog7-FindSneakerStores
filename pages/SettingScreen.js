@@ -25,7 +25,7 @@ const SettingScreen = () => {
     //Bij de tweede doe ik switchen tussen de languages, hij werkt niet maar je kan switchen tussen nederlands of engels
     <SafeAreaView style={styles.container}>
       <View style={styles.settingRow}>
-        <Text style={[styles.settingLabel]}>Donkere modus</Text>
+        <Text style={[styles.settingLabel, { color: theme.color }]}>Donkere modus</Text>
         <Switch
           value={darkMode}
           onValueChange={(value) => {
@@ -36,9 +36,9 @@ const SettingScreen = () => {
       </View>
       
       <View style={styles.settingRow}>
-        <Text style={[styles.settingLabel]}>Taal</Text>
+        <Text style={[styles.settingLabel, { color: theme.color }]}>Taal</Text>
         <TouchableOpacity onPress={toggleLanguage}>
-          <Text style={[styles.languageText]}>{language}</Text>
+          <Text style={[styles.languageText, { color: theme.color }]}>{language}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

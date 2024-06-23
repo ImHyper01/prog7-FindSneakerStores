@@ -27,7 +27,7 @@ const HomeScreen = ({ navigation }) => {
                             textAlign: 'center',
                             marginBottom: 16
                         }}>
-                        <Text>Welkom op de home pagina</Text>
+                        <Text style={[styles.home, { color: theme.color }]}>Welkom op de home pagina</Text>
                         </Text>
 
                     <TouchableOpacity
