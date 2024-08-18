@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {  DefaultTheme, DarkTheme, NavigationContainer } from '@react-navigation/native';
@@ -79,6 +80,8 @@ function App() {
 
 const [loading, setLoading] = useState(true);
 const [shoes, setShoes] = useState([]);
+const [darkMode, setDarkMode] = useState(false);
+
 
 const getShoes = async () => {
   try {
@@ -96,12 +99,24 @@ const getShoes = async () => {
     getShoes();
   }, []);
 
-  //begin darkmodus
-  const [darkMode, setDarkMode] = useState(false)
+
+  //load gekozen theme op app start
+  useEffect(() => {
+    const loadTheme = async () => {
+      const saveTheme = await AsyncStorage.getItem('theme');
+      if (saveTheme) {
+        setDarkMode(saveTheme === 'dark' );
+      }
+    };
+    loadTheme();
+  }, []);
+
+  
   //event listener toevoegen om te kunnen togglen tussen dark en light modus
   useEffect(() => {
     const listener = EventRegister.addEventListener('ChangeTheme', (data) => {
       setDarkMode(data)
+      AsyncStorage.setItem('theme', data ? 'dark' : 'light');
     })
     return () => {
       EventRegister.removeAllListeners(listener)
