@@ -65,69 +65,80 @@ const ListScreen = ({ route, navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1, padding: 16 }}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ScrollView style={styles.ScrollView}>
-            {shoes.map((shoe, index) => (
-              <View style={styles.listView} key={index}>
-                <TouchableOpacity
-                  style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}
-                  onPress={() => handleShoeItemClick(shoe)}
-                >
-                  <Text style={[styles.textItem, { color: theme.color }]}>{shoe.title}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleSaveShoe(shoe.title)} style={[styles.itemHeartButton, { color: theme.color }]}>
-                  <Icon
-                    name={isShoeSaved(shoe.title) ? 'heart' : 'heart-outline'}
-                    size={30}
-                    color={isShoeSaved(shoe.title) ? 'red' : theme.color}
-                  />
-                </TouchableOpacity>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
-        <TouchableOpacity style={[styles.heartButton, { backgroundColor: theme.color }]} onPress={() => navigation.navigate('Saved')}>
-          <Icon name='heart' size={30} color='red' />
-        </TouchableOpacity>
+        <ScrollView contentContainerStyle={styles.gridContainer}>
+          {shoes.map((shoe, index) => (
+            <View style={styles.shoeItem} key={index}>
+              <TouchableOpacity
+                style={styles.shoeContent}
+                onPress={() => handleShoeItemClick(shoe)}
+              >
+                {/* Hier kan het logo van de schoen worden geplaatst */}
+                <Icon name="shoe" size={30} color={theme.color} /> 
+                <Text style={[styles.textItem, { color: theme.color }]}>{shoe.title}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleSaveShoe(shoe.title)}
+                style={styles.itemHeartButton}
+              >
+                <Icon
+                  name={isShoeSaved(shoe.title) ? 'heart' : 'heart-outline'}
+                  size={30}
+                  color={isShoeSaved(shoe.title) ? 'red' : theme.color}
+                />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </ScrollView>
       </View>
+      {/* <TouchableOpacity
+        style={[styles.heartButton, { backgroundColor: theme.color }]}
+        onPress={() => navigation.navigate('Saved')}
+      >
+        <Icon name="heart" size={30} color="red" />
+      </TouchableOpacity> */}
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  ScrollView: {
-    marginTop: 60,
-    width: '100%',
-  },
-  listView: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  shoeItem: {
-    flex: 1,
-    paddingHorizontal: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  itemHeartButton: {
-    flex: 1,
-  },
-  textItem: {
-    flex: 1,
-    fontSize: 20,
-  },
-  heartButton: {
-    position: 'absolute',
-    top: 16,
-    right: 16,
-    zIndex: 1,
-    backgroundColor: '#000',
-    padding: 8,
-    borderRadius: 20,
-    elevation: 5,
-  },
-});
+  const styles = StyleSheet.create({
+    gridContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+    },
+    shoeItem: {
+      width: '48%', // Twee items per rij
+      marginBottom: 16,
+      backgroundColor: '#fff', // Optioneel: achtergrondkleur voor elk item
+      borderRadius: 8,
+      padding: 16,
+      flexDirection: 'column',
+      alignItems: 'center', // Zorg ervoor dat inhoud gecentreerd is
+    },
+    shoeContent: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      marginBottom: 8,
+    },
+    textItem: {
+      fontSize: 16,
+      textAlign: 'center', // Optioneel: om tekst gecentreerd te maken
+      marginTop: 8,
+    },
+    itemHeartButton: {
+      position: 'absolute',
+      top: 8,
+      right: 8,
+    },
+    heartButton: {
+      position: 'absolute',
+      top: 16,
+      right: 16,
+      zIndex: 1,
+      backgroundColor: '#000',
+      padding: 8,
+      borderRadius: 20,
+      elevation: 5,
+    },
+  });
 
 export default ListScreen;
