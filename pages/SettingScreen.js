@@ -1,9 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, SafeAreaView, Switch, TouchableOpacity, State } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import themeContext from '../theme/themeContext';
 import { StyleSheet } from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingScreen = () => {
 
@@ -13,6 +13,23 @@ const SettingScreen = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState('nederlands');
 
+  useEffect(() => {
+    const loadDarkMode = async() => {
+      const savedDarkMode = await AsyncStorage.getItem('darkMode');
+      if (savedDarkMode !== null) {
+        setDarkMode(JSON.parse(savedDarkMode));
+        EventRegister.emit('ChangeTheme', JSON.parse(savedDarkMode));
+      }
+    };
+
+    loadDarkMode();
+  }, []);
+
+  const toggleDarkMode = async (value) => {
+    setDarkMode(value);
+    EventRegister.emit('ChangeTheme', value);
+    await AsyncStorage.setItem('darkMode', JSON.stringify(value));
+  };
  
   //toggle language, helaas veranderd de applicatie niet van taal. puur erin gelaten omdat ik de settings page beetje leeg vond.
   const toggleLanguage = () => {
@@ -28,10 +45,7 @@ const SettingScreen = () => {
         <Text style={[styles.settingLabel, { color: theme.color }]}>Donkere modus</Text>
         <Switch
           value={darkMode}
-          onValueChange={(value) => {
-            setDarkMode(value);
-            EventRegister.emit('ChangeTheme', value);
-          }}
+          onValueChange={toggleDarkMode}
         />
       </View>
       

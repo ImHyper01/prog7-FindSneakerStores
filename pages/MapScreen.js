@@ -55,6 +55,25 @@ const MapScreen = ({ route, navigation }) => {
     }
   }, [selectedShoe]);
 
+  //handle om naar je current locatie te gaan
+  const goToCurrentLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = location.coords;
+      
+      mapRef.current?.animateToRegion({
+        latitude,
+        longitude,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,
+      });
+    };
+
   // create een refrence naar de map
   const mapRef = React.useRef(null);
 
@@ -90,6 +109,12 @@ const MapScreen = ({ route, navigation }) => {
           <TouchableOpacity style={[styles.heartButton, { backgroundColor: theme.color }]} onPress={() => navigation.navigate('Saved')}>
             <Icon name='heart' size={30} color="red" />
           </TouchableOpacity>
+
+          {/* button naar de current location */}
+          <TouchableOpacity style={styles.locationButton} onPress={goToCurrentLocation}>
+            <Icon name='crosshairs-gps' size={30} color="white" />
+          </TouchableOpacity>
+
         </View>
       </View>
     </SafeAreaView>
@@ -107,6 +132,16 @@ const styles = StyleSheet.create({
   heartButton: {
     position: 'absolute',
     top: 16,
+    right: 16,
+    zIndex: 1,
+    backgroundColor: '#000',
+    padding: 8,
+    borderRadius: 20,
+    elevation: 5,
+  },
+  locationButton: {
+    position: 'absolute',
+    bottom: 16,
     right: 16,
     zIndex: 1,
     backgroundColor: '#000',

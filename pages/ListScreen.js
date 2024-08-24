@@ -72,8 +72,8 @@ const ListScreen = ({ route, navigation }) => {
                 style={styles.shoeContent}
                 onPress={() => handleShoeItemClick(shoe)}
               >
-                {/* Hier kan het logo van de schoen worden geplaatst */}
-                <Icon name="shoe" size={30} color={theme.color} /> 
+                
+                <Icon name="store" size={30} color={theme.color} /> 
                 <Text style={[styles.textItem, { color: theme.color }]}>{shoe.title}</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -90,12 +90,12 @@ const ListScreen = ({ route, navigation }) => {
           ))}
         </ScrollView>
       </View>
-      {/* <TouchableOpacity
+      <TouchableOpacity
         style={[styles.heartButton, { backgroundColor: theme.color }]}
         onPress={() => navigation.navigate('Saved')}
       >
         <Icon name="heart" size={30} color="red" />
-      </TouchableOpacity> */}
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -106,13 +106,13 @@ const ListScreen = ({ route, navigation }) => {
       justifyContent: 'space-between',
     },
     shoeItem: {
-      width: '48%', // Twee items per rij
+      width: '48%', 
       marginBottom: 16,
-      backgroundColor: '#fff', // Optioneel: achtergrondkleur voor elk item
       borderRadius: 8,
+      backgroundColor: "#eb9e34",
       padding: 16,
       flexDirection: 'column',
-      alignItems: 'center', // Zorg ervoor dat inhoud gecentreerd is
+      alignItems: 'center', 
     },
     shoeContent: {
       flexDirection: 'column',
@@ -121,7 +121,7 @@ const ListScreen = ({ route, navigation }) => {
     },
     textItem: {
       fontSize: 16,
-      textAlign: 'center', // Optioneel: om tekst gecentreerd te maken
+      textAlign: 'center',
       marginTop: 8,
     },
     itemHeartButton: {
@@ -131,7 +131,7 @@ const ListScreen = ({ route, navigation }) => {
     },
     heartButton: {
       position: 'absolute',
-      top: 16,
+      bottom: 16,
       right: 16,
       zIndex: 1,
       backgroundColor: '#000',
