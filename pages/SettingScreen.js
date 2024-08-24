@@ -13,6 +13,7 @@ const SettingScreen = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState('nederlands');
 
+  //opslaan in async storage + het laden uit de async storage
   useEffect(() => {
     const loadDarkMode = async() => {
       const savedDarkMode = await AsyncStorage.getItem('darkMode');
@@ -38,7 +39,7 @@ const SettingScreen = () => {
   };
 
   return (
-    //Hier kun je switchen tussen light en dark modus door een eventRegister. ik gebruik een swicth om tussen de twee values te kunnen switchen.
+    //Hier kun je switchen tussen light en dark modus. ik gebruik een swicth om tussen de twee values te kunnen switchen.
     //Bij de tweede doe ik switchen tussen de languages, hij werkt niet maar je kan switchen tussen nederlands of engels
     <SafeAreaView style={styles.container}>
       <View style={styles.settingRow}>
