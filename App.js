@@ -64,7 +64,7 @@ function ListStack({ shoes }) {
 }
 
 //bottom tab navigator
-function SettingStack(){
+function SettingsStack(){
   return(
     <Stack.Navigator initialRouteName="Settings" screenOptions={{ headerShown: false}}>
         <Stack.Screen 
@@ -151,7 +151,7 @@ const getShoes = async () => {
               iconName = focused
                 ? 'format-list-bulleted'
                 : 'format-list-bulleted';
-            }else if (route.name === 'SettingStack') {
+            }else if (route.name === 'SettingsStack') {
               iconName = focused
                 ? 'cog'
                 : 'cog-outline';
@@ -190,8 +190,8 @@ const getShoes = async () => {
           }} />
 
           <Tab.Screen 
-          name='SettingStack'
-          component={SettingStack}
+          name='SettingsStack'
+          component={SettingsStack}
           options={{
             tabBarLabel: 'Setting',
             title: 'Setting',

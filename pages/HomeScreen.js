@@ -8,7 +8,7 @@ import {View,
         SafeAreaView 
     } from "react-native";
 
-
+//menu hyperlinks naar de verschillende pagina's
 const HomeScreen = ({ navigation }) => {
     
     const theme = useContext(themeContext);
